@@ -333,7 +333,8 @@ update_fpga_toolchain_var ()
         saylinx*                         | \
         step_max10                       | \
         terasic_sockit                   | \
-        zeowaa*                          )
+        zeowaa*                          | \
+        waveshare_dvk600                 )
 
             fpga_toolchain=quartus
             use_old_version_of_quartus=0

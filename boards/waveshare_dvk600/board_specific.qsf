@@ -1,0 +1,207 @@
+set_global_assignment -name DEVICE EP4CE10E22C8
+
+set_global_assignment   -name RESERVE_ALL_UNUSED_PINS_WEAK_PULLUP "AS INPUT TRI-STATED"
+
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to *
+
+set_location_assignment	PIN_E16	      -to	CLK
+set_location_assignment	PIN_B16	      -to	RESET
+
+# LED
+set_location_assignment	PIN_D12	      -to	LED[0]
+set_location_assignment	PIN_C11	      -to	LED[1]
+set_location_assignment	PIN_B10	      -to	LED[2]
+set_location_assignment	PIN_B7	      -to	LED[3]
+
+# Herder_Left
+set_location_assignment	H_LEFT [1]    -to	GND
+set_location_assignment	H_LEFT [2]    -to	3.3V
+set_location_assignment	H_LEFT [3]    -to	PIN_R12
+set_location_assignment	H_LEFT [4]    -to	PIN_T12
+set_location_assignment	H_LEFT [5]    -to	PIN_R13
+set_location_assignment	H_LEFT [6]    -to	PIN_T13
+set_location_assignment	H_LEFT [7]    -to	PIN_R14
+set_location_assignment	H_LEFT [8]    -to	PIN_T14
+set_location_assignment	H_LEFT [9]    -to	PIN_R16
+set_location_assignment	H_LEFT [10]   -to	PIN_T15
+set_location_assignment	H_LEFT [11]   -to	PIN_P16
+set_location_assignment	H_LEFT [12]   -to	PIN_P15
+set_location_assignment	H_LEFT [13]   -to	PIN_N16
+set_location_assignment	H_LEFT [14]   -to	PIN_N15
+set_location_assignment	H_LEFT [15]   -to	PIN_L16
+set_location_assignment	H_LEFT [16]   -to	PIN_L15
+set_location_assignment	H_LEFT [17]   -to	PIN_K16
+set_location_assignment	H_LEFT [18]   -to	PIN_K15
+set_location_assignment	H_LEFT [19]   -to	PIN_J16
+set_location_assignment	H_LEFT [20]   -to	PIN_J15
+set_location_assignment	H_LEFT [21]   -to	PIN_G15
+set_location_assignment	H_LEFT [22]   -to	PIN_G16
+set_location_assignment	H_LEFT [23]   -to	GND
+set_location_assignment	H_LEFT [24]   -to	5V
+set_location_assignment	H_LEFT [25]   -to	PIN_F15
+set_location_assignment	H_LEFT [26]   -to	PIN_F16
+set_location_assignment	H_LEFT [27]   -to	PIN_M10
+set_location_assignment	H_LEFT [28]   -to	PIN_L10
+set_location_assignment	H_LEFT [29]   -to	PIN_N13	
+set_location_assignment	H_LEFT [30]   -to	PIN_M11
+set_location_assignment	H_LEFT [31]   -to	PIN_N14
+set_location_assignment	H_LEFT [32]   -to	PIN_P14
+set_location_assignment	H_LEFT [33]   -to	PIN_M12
+set_location_assignment	H_LEFT [34]   -to	PIN_L13
+set_location_assignment	H_LEFT [35]   -to	PIN_L14
+set_location_assignment	H_LEFT [36]   -to	PIN_L12
+set_location_assignment	H_LEFT [37]   -to	PIN_L11
+set_location_assignment	H_LEFT [38]   -to	PIN_J13
+set_location_assignment	H_LEFT [39]   -to	PIN_J12
+set_location_assignment	H_LEFT [40]   -to	PIN_K12
+set_location_assignment	H_LEFT [41]   -to	PIN_J11
+set_location_assignment	H_LEFT [42]   -to	PIN_K11
+set_location_assignment	H_LEFT [43]   -to	PIN_F11
+set_location_assignment	H_LEFT [44]   -to	PIN_K10
+set_location_assignment	H_LEFT [45]   -to	PIN_F13
+set_location_assignment	H_LEFT [46]   -to	PIN_J14
+set_location_assignment	H_LEFT [47]   -to	PIN_D16
+set_location_assignment	H_LEFT [48]   -to	PIN_F14
+set_location_assignment	H_LEFT [49]   -to	PIN_C16
+set_location_assignment	H_LEFT [50]   -to	PIN_D15
+set_location_assignment	H_LEFT [51]   -to	PIN_D14
+set_location_assignment	H_LEFT [52]   -to	PIN_C15
+set_location_assignment	H_LEFT [53]   -to	PIN_A15
+set_location_assignment	H_LEFT [54]   -to	PIN_C14
+
+# Herder_Right
+set_location_assignment	H_RIGHT [1]   -to	GND
+set_location_assignment	H_RIGHT [2]   -to	3.3V
+set_location_assignment	H_RIGHT [3]   -to	PIN_L6
+set_location_assignment	H_RIGHT [4]   -to	PIN_N8
+set_location_assignment	H_RIGHT [5]   -to	PIN_P8
+set_location_assignment	H_RIGHT [6]   -to	PIN_P6
+set_location_assignment	H_RIGHT [7]   -to	PIN_N6
+set_location_assignment	H_RIGHT [8]   -to	PIN_N5
+set_location_assignment	H_RIGHT [9]   -to	PIN_P3
+set_location_assignment	H_RIGHT [10]  -to	PIN_N3
+set_location_assignment	H_RIGHT [11]  -to	PIN_L4
+set_location_assignment	H_RIGHT [12]  -to	PIN_L3
+set_location_assignment	H_RIGHT [13]  -to	PIN_T2
+set_location_assignment	H_RIGHT [14]  -to	PIN_R1
+set_location_assignment	H_RIGHT [15]  -to	PIN_P2
+set_location_assignment	H_RIGHT [16]  -to	PIN_P1
+set_location_assignment	H_RIGHT [17]  -to	PIN_N2
+set_location_assignment	H_RIGHT [18]  -to	PIN_N1
+set_location_assignment	H_RIGHT [19]  -to	PIN_L2
+set_location_assignment	H_RIGHT [20]  -to	PIN_L1
+set_location_assignment	H_RIGHT [21]  -to	PIN_K2
+set_location_assignment	H_RIGHT [22]  -to	PIN_K1
+set_location_assignment	H_RIGHT [23]  -to	GND
+set_location_assignment	H_RIGHT [24]  -to	5V
+set_location_assignment	H_RIGHT [25]  -to	PIN_J2
+set_location_assignment	H_RIGHT [26]  -to	PIN_J1
+set_location_assignment	H_RIGHT [27]  -to	PIN_G2
+set_location_assignment	H_RIGHT [28]  -to	PIN_G1
+set_location_assignment	H_RIGHT [29]  -to	PIN_F2
+set_location_assignment	H_RIGHT [30]  -to	PIN_F1
+set_location_assignment	H_RIGHT [31]  -to	PIN_D1
+set_location_assignment	H_RIGHT [32]  -to	PIN_C2
+set_location_assignment	H_RIGHT [33]  -to	PIN_B1
+set_location_assignment	H_RIGHT [34]  -to	PIN_A2
+set_location_assignment	H_RIGHT [35]  -to	PIN_B3
+set_location_assignment	H_RIGHT [36]  -to	PIN_A3
+set_location_assignment	H_RIGHT [37]  -to	PIN_B4
+set_location_assignment	H_RIGHT [38]  -to	PIN_A4
+set_location_assignment	H_RIGHT [39]  -to	PIN_B5
+set_location_assignment	H_RIGHT [40]  -to	PIN_A5
+set_location_assignment	H_RIGHT [41]  -to	PIN_B6
+set_location_assignment	H_RIGHT [42]  -to	PIN_A6
+set_location_assignment	H_RIGHT [43]  -to	PIN_F3
+set_location_assignment	H_RIGHT [44]  -to	PIN_D3
+set_location_assignment	H_RIGHT [45]  -to	PIN_C3
+set_location_assignment	H_RIGHT [46]  -to	PIN_D4
+set_location_assignment	H_RIGHT [47]  -to	PIN_K6
+set_location_assignment	H_RIGHT [48]  -to	PIN_K5
+set_location_assignment	H_RIGHT [49]  -to	PIN_J6
+set_location_assignment	H_RIGHT [50]  -to	PIN_G5
+set_location_assignment	H_RIGHT [51]  -to	PIN_F7
+set_location_assignment	H_RIGHT [52]  -to	PIN_F5
+set_location_assignment	H_RIGHT [53]  -to	PIN_F6
+set_location_assignment	H_RIGHT [54]  -to	PIN_E5
+
+# Herder_Up
+set_location_assignment	H_UP [1]      -to	PIN_R11
+set_location_assignment	H_UP [2]      -to	PIN_N12
+set_location_assignment	H_UP [3]      -to	PIN_P11
+set_location_assignment	H_UP [4]      -to	PIN_N11
+set_location_assignment	H_UP [5]      -to	PIN_P9
+set_location_assignment	H_UP [6]      -to	PIN_N9
+set_location_assignment	H_UP [7]      -to	PIN_R10
+set_location_assignment	H_UP [8]      -to	PIN_T11
+set_location_assignment	H_UP [9]      -to	PIN_R9
+set_location_assignment	H_UP [10]     -to	PIN_T10
+set_location_assignment	H_UP [11]     -to	PIN_R8
+set_location_assignment	H_UP [12]     -to	PIN_T9
+set_location_assignment	H_UP [13]     -to	PIN_R7
+set_location_assignment	H_UP [14]     -to	PIN_T8
+set_location_assignment	H_UP [15]     -to	PIN_R6
+set_location_assignment	H_UP [16]     -to	PIN_T7
+set_location_assignment	H_UP [17]     -to	PIN_R5
+set_location_assignment	H_UP [18]     -to	PIN_T6
+set_location_assignment	H_UP [19]     -to	PIN_R4
+set_location_assignment	H_UP [20]     -to	PIN_T5
+set_location_assignment	H_UP [21]     -to	PIN_R3
+set_location_assignment	H_UP [22]     -to	PIN_T4
+set_location_assignment	H_UP [23]     -to	PIN_M9
+set_location_assignment	H_UP [24]     -to	PIN_T3
+set_location_assignment	H_UP [25]     -to	PIN_K9
+set_location_assignment	H_UP [26]     -to	PIN_L9
+set_location_assignment	H_UP [27]     -to	PIN_L8
+set_location_assignment	H_UP [28]     -to	PIN_K8
+set_location_assignment	H_UP [29]     -to	PIN_M7
+set_location_assignment	H_UP [30]     -to	PIN_M8
+set_location_assignment	H_UP [31]     -to	PIN_M6
+set_location_assignment	H_UP [32]     -to	PIN_L7
+
+# Herder_Down
+set_location_assignment	H_DOWN [1]    -to	PIN_D11
+set_location_assignment	H_DOWN [2]    -to	PIN_B14
+set_location_assignment	H_DOWN [3]    -to	PIN_F10
+set_location_assignment	H_DOWN [4]    -to	PIN_E11
+set_location_assignment	H_DOWN [5]    -to	PIN_B13
+set_location_assignment	H_DOWN [6]    -to	PIN_A14
+set_location_assignment	H_DOWN [7]    -to	PIN_B12
+set_location_assignment	H_DOWN [8]    -to	PIN_A13
+set_location_assignment	H_DOWN [9]    -to	PIN_A11
+set_location_assignment	H_DOWN [10]   -to	PIN_A12
+set_location_assignment	H_DOWN [11]   -to	PIN_A10
+set_location_assignment	H_DOWN [12]   -to	PIN_B11
+set_location_assignment	H_DOWN [13]   -to	PIN_C9
+set_location_assignment	H_DOWN [14]   -to	PIN_D9
+set_location_assignment	H_DOWN [15]   -to	PIN_C8
+set_location_assignment	H_DOWN [16]   -to	PIN_D8
+set_location_assignment	H_DOWN [17]   -to	PIN_E10
+set_location_assignment	H_DOWN [18]   -to	PIN_E9
+set_location_assignment	H_DOWN [19]   -to	PIN_F9
+set_location_assignment	H_DOWN [20]   -to	PIN_G11
+set_location_assignment	H_DOWN [21]   -to	PIN_F8
+set_location_assignment	H_DOWN [22]   -to	PIN_E8
+set_location_assignment	H_DOWN [23]   -to	PIN_E7
+set_location_assignment	H_DOWN [24]   -to	PIN_D6
+set_location_assignment	H_DOWN [25]   -to	PIN_C6
+set_location_assignment	H_DOWN [26]   -to	PIN_D5
+set_location_assignment	H_DOWN [27]   -to	PIN_A9
+set_location_assignment	H_DOWN [28]   -to	PIN_B9
+set_location_assignment	H_DOWN [29]   -to	PIN_A8
+set_location_assignment	H_DOWN [30]   -to	PIN_B8
+set_location_assignment	H_DOWN [31]   -to	PIN_E6
+set_location_assignment	H_DOWN [32]   -to	PIN_A7
+
+#Buzzer
+set_location_assignment	buzzer        -to PIN_J1
+
+#DS18B20
+set_location_assignment	ds18b20       -to	PIN_J2
+
+#JOYSTICK
+set_location_assignment	down 	        -to	PIN_F1
+set_location_assignment	left	        -to	PIN_F2
+set_location_assignment	rigth         -to	PIN_G1
+set_location_assignment	up	          -to	PIN_G2
+set_location_assignment	press 	      -to	PIN_D1
