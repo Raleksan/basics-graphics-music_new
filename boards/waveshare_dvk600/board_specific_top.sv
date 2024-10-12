@@ -3,6 +3,14 @@
 
 //----------------------------------------------------------------------------
 
+`ifdef FORCE_NO_INSTANTIATE_TM1638_BOARD_CONTROLLER_MODULE
+    `undef INSTANTIATE_TM1638_BOARD_CONTROLLER_MODULE
+`endif
+
+`define IMITATE_RESET_ON_POWER_UP_FOR_TWO_BUTTON_CONFIGURATION
+
+//----------------------------------------------------------------------------
+
 module board_specific_top
 # (
     parameter clk_mhz       = 50,
@@ -10,13 +18,18 @@ module board_specific_top
 
               w_key         = 0,
               w_sw          = 0,
-              w_led         = 4,
+              w_led         = 0,
               w_digit       = 0,
+              w_gpio        = 5,
 
               w_h_left      = 54,
               w_h_right     = 54,
               w_h_up        = 32,
               w_h_down      = 32,
+
+              w_red         = 4,
+              w_green       = 4,
+              w_blue        = 4,
 
               screen_width  = 640,
               screen_height = 480,
@@ -38,37 +51,79 @@ module board_specific_top
 
     //------------------------------------------------------------------------
 
-    wire clk =   CLK;
-    wire rst = ~ RESET;
+    localparam w_tm_key   = 8,
+               w_tm_led   = 8,
+               w_tm_digit = 8;
+
+    `ifdef INSTANTIATE_TM1638_BOARD_CONTROLLER_MODULE
+
+        localparam w_lab_key   = w_tm_key,
+                   w_lab_sw    = w_sw,
+                   w_lab_led   = w_tm_led,
+                   w_lab_digit = w_tm_digit;
+
+    `else                   // TM1638 module is not connected
+
+        localparam w_lab_key   = w_key,
+                   w_lab_sw    = w_sw,
+                   w_lab_led   = w_led,
+                   w_lab_digit = w_digit;
+
+    `endif
 
     //------------------------------------------------------------------------
 
-    wire [w_led   - 1:0] lab_led;
+    wire                      clk   =   CLK;
+    wire                      rst;
 
-    // Seven-segment display
+    wire  [w_gpio      - 1:0] gpio;
 
-    wire [          7:0] abcdefgh;
-    wire [w_digit - 1:0] digit;
+    wire  [              7:0] abcdefgh;
 
-    // Graphics
+    wire  [w_x         - 1:0] x;
+    wire  [w_y         - 1:0] y;
 
-    wire                 display_on;
+    wire  [w_red       - 1:0] red;
+    wire  [w_green     - 1:0] green;
+    wire  [w_blue      - 1:0] blue;
 
-    wire [w_x     - 1:0] x;
-    wire [w_y     - 1:0] y;
+    wire  [             23:0] mic;
+    wire  [             15:0] sound;
 
-    wire [w_red   - 1:0] red;
-    wire [w_green - 1:0] green;
-    wire [w_blue  - 1:0] blue;
+    wire  [w_tm_key    - 1:0] tm_key;
+    wire  [w_tm_led    - 1:0] tm_led;
+    wire  [w_tm_digit  - 1:0] tm_digit;
 
-    assign VGA_R = display_on & ( | red   );
-    assign VGA_G = display_on & ( | green );
-    assign VGA_B = display_on & ( | blue  );
+    logic [w_lab_key   - 1:0] lab_key;
+    wire  [w_lab_led   - 1:0] lab_led;
+    wire  [w_lab_digit - 1:0] lab_digit;
 
-    // Sound
+    //------------------------------------------------------------------------
 
-    wire [         23:0] mic;
-    wire [         15:0] sound;
+    `ifdef INSTANTIATE_TM1638_BOARD_CONTROLLER_MODULE
+
+        assign rst      = tm_key [w_tm_key - 1];
+        assign lab_key  = tm_key [w_tm_key - 1:0];
+
+        assign tm_led   = lab_led;
+        assign tm_digit = lab_digit;
+
+        assign LED      = w_led' (~ lab_led);
+
+    `elsif IMITATE_RESET_ON_POWER_UP_FOR_TWO_BUTTON_CONFIGURATION
+
+        imitate_reset_on_power_up i_imitate_reset_on_power_up (clk, rst);
+
+        assign lab_key  = ~ KEY [w_key - 1:0];
+        assign LED      = ~ lab_led;
+
+    `else  // TM1638 module is not connected and no reset initation
+
+        assign rst      = ~ RESET;
+
+    `endif
+
+    assign gpio = H_DOWN [1 +: w_gpio];
 
     //------------------------------------------------------------------------
 
@@ -80,62 +135,89 @@ module board_specific_top
     //------------------------------------------------------------------------
 
     lab_top
-    # (
-        .clk_mhz       (   clk_mhz       ),
+     # (
+        .clk_mhz       ( clk_mhz       ),
 
-        .w_key         (   w_key         ),
-        .w_sw          (   w_sw          ),
-        .w_led         (   w_led         ),
-        .w_digit       (   w_digit       ),
-        .w_gpio        (   w_gpio        ),
+        .w_key         ( w_lab_key     ),  // The last key is used for a reset
+        .w_sw          ( w_lab_key     ),
+        .w_led         ( w_lab_led     ),
+        .w_digit       ( w_lab_digit   ),
+        .w_gpio        ( w_gpio        ),
 
-        .screen_width  (   screen_width  ),
-        .screen_height (   screen_height ),
+        .screen_width  ( screen_width  ),
+        .screen_height ( screen_height ),
 
-        .w_red         (   w_red         ),
-        .w_green       (   w_green       ),
-        .w_blue        (   w_blue        )
+        .w_red         ( w_red         ),
+        .w_green       ( w_green       ),
+        .w_blue        ( w_blue        )
     )
     i_lab_top
     (
-        .clk           (   clk           ),
-        .slow_clk      (   slow_clk      ),
-        .rst           (   rst           ),
+        .clk           ( clk           ),
+        .slow_clk      ( slow_clk      ),
+        .rst           ( rst           ),
 
-        .key           ( ~ KEY_SW        ),
-        .sw            ( ~ KEY_SW        ),
+        .key           ( lab_key       ),
+        .sw            ( lab_key       ),
 
-        .led           (   lab_led       ),
+        .led           ( lab_led       ),
 
-        .abcdefgh      (   abcdefgh      ),
-        .digit         (   digit         ),
+        .abcdefgh      ( abcdefgh      ),
+        .digit         ( lab_digit     ),
 
-        .x             (   x             ),
-        .y             (   y             ),
+        .x             ( x             ),
+        .y             ( y             ),
 
-        .red           (   red           ),
-        .green         (   green         ),
-        .blue          (   blue          ),
+        .red           ( red           ),
+        .green         ( green         ),
+        .blue          ( blue          ),
 
-        .uart_rx       (   UART_RXD      ),
-        .uart_tx       (   UART_TXD      ),
+        .uart_rx       (        ),
+        .uart_tx       (        ),
 
-        .mic           (   mic           ),
-        .sound         (   sound         ),
-
-        `ifdef USE_SDRAM_PINS_AS_GPIO
-            .gpio ( PSEUDO_GPIO_USING_SDRAM_PINS )
-        `elsif USE_LCD_AS_GPIO
-            .gpio ({ LCD_RS, LCD_RW, LCD_E, LCD_D })
-        `endif
+        .mic           ( mic           ),
+        .sound         ( sound         ),
+        .gpio          ( gpio          )
     );
 
     //------------------------------------------------------------------------
 
-    assign LED       = ~ lab_led;
+    `ifdef INSTANTIATE_TM1638_BOARD_CONTROLLER_MODULE
 
-    assign SEG       = ~ abcdefgh;
-    assign DIG       = ~ digit;
+    wire [$left (abcdefgh):0] hgfedcba;
+
+    generate
+        genvar i;
+
+        for (i = 0; i < $bits (abcdefgh); i ++)
+        begin : abc
+            assign hgfedcba [i] = abcdefgh [$left (abcdefgh) - i];
+        end
+    endgenerate
+
+    //------------------------------------------------------------------------
+
+    `ifdef INSTANTIATE_TM1638_BOARD_CONTROLLER_MODULE
+
+    tm1638_board_controller
+    # (
+        .clk_mhz  ( clk_mhz        ),
+        .w_digit  ( w_tm_digit     )
+    )
+    i_tm1638
+    (
+        .clk      ( clk            ),
+        .rst      ( rst            ),
+        .hgfedcba ( hgfedcba       ),
+        .digit    ( tm_digit       ),
+        .ledr     ( tm_led         ),
+        .keys     ( tm_key         ),
+        .sio_data (        ),
+        .sio_clk  (    ),
+        .sio_stb  (  )
+    );
+
+    `endif
 
     //------------------------------------------------------------------------
 
@@ -153,9 +235,9 @@ module board_specific_top
         (
             .clk         ( clk        ),
             .rst         ( rst        ),
-            .hsync       ( VGA_HSYNC  ),
-            .vsync       ( VGA_VSYNC  ),
-            .display_on  ( display_on ),
+            .hsync       (   ),
+            .vsync       (   ),
+            .display_on  (  ),
             .hpos        ( x10        ),
             .vpos        ( y10        ),
             .pixel_clk   (            )
@@ -167,32 +249,6 @@ module board_specific_top
 
     `ifdef INSTANTIATE_MICROPHONE_INTERFACE_MODULE
 
-        `ifdef USE_DIGILENT_PMOD_MIC3
-
-            wire [11:0] mic_12;
-
-            digilent_pmod_mic3_spi_receiver i_microphone
-            (
-                .clk   ( clk                               ),
-                .rst   ( rst                               ),
-                .cs    ( PSEUDO_GPIO_USING_SDRAM_PINS  [0] ),
-                .sck   ( PSEUDO_GPIO_USING_SDRAM_PINS  [6] ),
-                .sdo   ( PSEUDO_GPIO_USING_SDRAM_PINS  [4] ),
-                .value ( mic_12                            )
-            );
-
-            assign PSEUDO_GPIO_USING_SDRAM_PINS [ 8] = 1'b0;  // GND
-            assign PSEUDO_GPIO_USING_SDRAM_PINS [10] = 1'b1;  // VCC
-
-            wire [11:0] mic_12_minus_offset = mic_12 - 12'h800;
-
-            assign mic = { { 12 { mic_12_minus_offset [11] } },
-                           mic_12_minus_offset };
-
-        //--------------------------------------------------------------------
-
-        `else  // USE_INMP_441_MIC
-
             inmp441_mic_i2s_receiver
             # (
                 .clk_mhz ( clk_mhz   )
@@ -201,15 +257,12 @@ module board_specific_top
             (
                 .clk     ( clk       ),
                 .rst     ( rst       ),
-                .lr      ( LCD_D [5] ),
-                .ws      ( LCD_D [3] ),
-                .sck     ( LCD_D [1] ),
-                .sd      ( LCD_D [2] ),
+                .lr      (  ),
+                .ws      (  ),
+                .sck     (  ),
+                .sd      (  ),
                 .value   ( mic       )
             );
-
-            assign LCD_D [6] = 1'b0;  // GND
-            assign LCD_D [4] = 1'b1;  // VCC
 
         `endif  // USE_INMP_441_MIC
 
@@ -228,11 +281,11 @@ module board_specific_top
             .clk     ( clk       ),
             .reset   ( rst       ),
             .data_in ( sound     ),
-            .mclk    ( LCD_E     ),  // Pin 143
-            .bclk    ( LCD_RS    ),  // Pin 141
-            .lrclk   ( LCD_RW    ),  // Pin 138
-            .sdata   ( LCD_D [0] )   // Pin 142
-        );                           // GND and VCC 3.3V (30-45 mA)
+            .mclk    (      ), 
+            .bclk    (     ),  
+            .lrclk   (     ),  
+            .sdata   (  )   
+        );                           
 
     `endif
 
